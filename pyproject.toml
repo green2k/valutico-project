@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "valutico-pavol-assignment"
+version = "0.1.0"
+description = "n/a"
+authors = ["Pavol Knapek <knapek.pavol@gmail.com>"]
+maintainers = ["Pavol Knapek <knapek.pavol@gmail.com>"]
+repository = "https://github.com/green2k/valutico-assignment"
+packages = [
+    { include = "pavol/*.py", from = "src" },
+    { include = "pavol/**/*.py", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9.1,<3.10"
+pyspark = {extras = ["sql"], version = "3.4.1"}
+boto3 = "~1.28.23"
+pydantic = "~1.9.0"
+kafka-python = "~2.0.2"
+confluent-kafka = "~2.2.0"
+geopy = "~2.3.0"
+redis = "~4.6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

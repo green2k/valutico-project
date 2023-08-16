@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  zoo1:
+    image: zookeeper:3.5.9
+    restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+    volumes:
+      - ./volumes/zookeeper1:/var/lib/zookeeper
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+      ZOOKEEPER_DATADIR: /var/lib/zookeeper
+
+  zoo2:
+    image: zookeeper:3.5.9
+    restart: always
+    hostname: zoo2
+    ports:
+      - 2182:2181
+    volumes:
+      - ./volumes/zookeeper2:/var/lib/zookeeper
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+      ZOOKEEPER_DATADIR: /var/lib/zookeeper
+
+  zoo3:
+    image: zookeeper:3.5.9
+    restart: always
+    hostname: zoo3
+    ports:
+      - 2183:2181
+    volumes:
+      - ./volumes/zookeeper3:/var/lib/zookeeper
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+      ZOOKEEPER_DATADIR: /var/lib/zookeeper
+
+  kafka0:
+    image: bitnami/kafka:3.4.1
+    restart: always
+    hostname: kafka0
+    ports:
+      - 9092:9092
+    volumes:
+      - ./volumes/kafka_broker_data:/bitnami/kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  redis:
+    image: redis:6.2.13-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - ./volumes/redis:/data
+
+  s3:
+    image: bitnami/minio:2023.7.18
+    restart: always
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - ./volumes/minio_data:/data
+    environment:
+      - BITNAMI_DEBUG=true
+      - MINIO_ROOT_USER=1234567890
+      - MINIO_ROOT_PASSWORD=1234567890
+      - MINIO_DEFAULT_BUCKETS=valuticolake
