@@ -8,6 +8,7 @@
   * Zookeeper
   * Kafka
   * Redis
+    * Accepting connections on `127.0.0.1:6379`
   * MinIO (S3)
     * Console available on http://127.0.0.1:9001 (username: 1234567890 / password: 1234567890)
 
@@ -30,3 +31,7 @@
   * Spark UI available on http://127.0.0.1:4040 (port 4041 if the Enricher is running at the same time)
   * 1) Reads the enriched stream from intermediate Kafka topic.
     2) Then calculates some analytical metrics & stores them into a Redis instance.
+  * Final data are stored on Redis:
+    1) [`DB0`] All vehicles, including their total distance travelled and the average speed in past 5 minutes.
+    2) [`DB1`] All timestamps, including the information about the fastest vehicle respective to the timestamp.
+    3) [`DB2`] All locations, including total count of vehicles nearby.

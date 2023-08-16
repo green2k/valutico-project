@@ -51,8 +51,8 @@ def upsert_topic(admin: KafkaAdminClient, topic: KafkaTopic) -> None:
     # Optionally create a new topic
     if topic.name not in remote_topics:
         topic = KAFKA_TOPICS["vehicle_location"]
-        logger.info("Creating topic: {topic}")
-        admin.create_topics([NewTopic(**topic)])
+        logger.info(f"Creating topic: {topic}")
+        admin.create_topics([NewTopic(**topic.dict())])
 
 
 def move_vehicle(vehicle: Vehicle) -> None:
